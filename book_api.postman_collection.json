@@ -1,0 +1,151 @@
+{
+  "info": {
+    "_postman_id": "a9314b10-7462-4bfe-9c2b-e74017a4129e",
+    "name": "Booklibr'e REST API",
+    "description": "Collection of CRUD REST API requests for Booklibr'e.\n\nEndpoints:\n- GET /books (List all books)\n- GET /books/:id (Retrieve specific book)\n- POST /books (Create new book)\n- PUT /books/:id (Update book)\n- DELETE /books/:id (Remove book)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. GET All Books",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/books",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "books"
+          ]
+        },
+        "description": "Retrieve the complete list of books stored in memory."
+      },
+      "response": []
+    },
+    {
+      "name": "2. GET Single Book by ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/books/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "books",
+            "1"
+          ]
+        },
+        "description": "Retrieve details of a single book with ID 1."
+      },
+      "response": []
+    },
+    {
+      "name": "3. POST Create New Book",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"The Count of Monte Cristo\",\n  \"author\": \"Alexandre Dumas\",\n  \"year\": 1844,\n  \"genre\": \"Adventure Fiction\",\n  \"cover\": \"https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=600&q=80\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/books",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "books"
+          ]
+        },
+        "description": "Create a new book volume in Booklibr'e."
+      },
+      "response": []
+    },
+    {
+      "name": "4. PUT Update Book by ID",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"The Great Gatsby (Centennial Edition)\",\n  \"author\": \"F. Scott Fitzgerald\",\n  \"year\": 1925,\n  \"genre\": \"American Classic Fiction\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/books/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "books",
+            "1"
+          ]
+        },
+        "description": "Amend an existing book by its unique ID."
+      },
+      "response": []
+    },
+    {
+      "name": "5. DELETE Book by ID",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/books/2",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "books",
+            "2"
+          ]
+        },
+        "description": "Remove a book from the catalog by its ID."
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    }
+  ]
+}

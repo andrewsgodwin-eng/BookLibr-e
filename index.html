@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booklibr'e — Curated REST API & Literary Archive</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
+</head>
+<body>
+
+  <!-- Smudged Ambient Library Backdrop & Warm Overlay -->
+  <div class="library-smudge-bg"></div>
+  <div class="warm-veil"></div>
+
+  <!-- Top Navigation Bar: Simple, Elegant, Generous Gaps -->
+  <header class="editorial-topbar">
+    <div class="topbar-wrapper">
+      <a href="#collection" class="editorial-brand" onclick="navigateTo('collection')">
+        <span class="brand-logotype">Booklibr'e</span>
+        <span class="brand-label">Archive & REST API</span>
+      </a>
+
+      <!-- Page Switcher Tabs with Gaps -->
+      <nav class="editorial-nav">
+        <button class="nav-link active" data-target="collection" onclick="navigateTo('collection')">
+          <span class="nav-index">01</span> Collection
+        </button>
+        <button class="nav-link" data-target="acquire" onclick="navigateTo('acquire')">
+          <span class="nav-index">02</span> Acquire Volume
+        </button>
+        <button class="nav-link" data-target="inspector" onclick="navigateTo('inspector')">
+          <span class="nav-index">03</span> Live Inspector
+        </button>
+        <button class="nav-link" data-target="docs" onclick="navigateTo('docs')">
+          <span class="nav-index">04</span> Postman & Docs
+        </button>
+      </nav>
+
+      <!-- Minimalist Meta Indicator -->
+      <div class="topbar-meta">
+        <div class="api-pill-minimal">
+          <span class="live-dot"></span>
+          <span>Online • Port 3000</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="app-viewport">
+
+    <!-- ====================================================
+         PAGE 1: COLLECTION (Curated Volumes Grid)
+         ==================================================== -->
+    <section id="page-collection" class="page-view active-page">
+      <div class="page-intro">
+        <span class="intro-tag">Curated Volumes</span>
+        <h1 class="intro-title">The Booklibr'e Collection</h1>
+        <p class="intro-desc">An in-memory literary archive queried through Node.js & Express REST endpoints.</p>
+        <div class="editorial-divider"></div>
+      </div>
+
+      <!-- Quick Metrics Strip & Search -->
+      <div class="gallery-meta-strip">
+        <div class="stat-group">
+          <div class="stat-item">
+            <span class="stat-number" id="statVolumes">0</span>
+            <span class="stat-caption">Volumes in Catalog</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" id="statAuthors">0</span>
+            <span class="stat-caption">Attributed Authors</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" id="statRequests">0</span>
+            <span class="stat-caption">REST API Calls</span>
+          </div>
+        </div>
+
+        <div class="search-field-minimal">
+          <span class="search-icon-minimal">🔍</span>
+          <input type="text" id="searchInput" placeholder="Search volumes by title, author, year...">
+        </div>
+      </div>
+
+      <!-- Book Grid -->
+      <div class="editorial-grid" id="booksGrid">
+        <!-- Rendered with custom book cover pictures by app.js -->
+      </div>
+    </section>
+
+    <!-- ====================================================
+         PAGE 2: ACQUIRE VOLUME (POST /books)
+         ==================================================== -->
+    <section id="page-acquire" class="page-view">
+      <div class="page-intro">
+        <span class="intro-tag">New Registration</span>
+        <h1 class="intro-title">Acquire New Volume</h1>
+        <p class="intro-desc">Issue a POST /books request to store a new literary work into Booklibr'e memory.</p>
+        <div class="editorial-divider"></div>
+      </div>
+
+      <div class="acquire-layout">
+        <!-- Add Book Form -->
+        <div class="luxury-form-card">
+          <form id="addBookForm">
+            <div class="form-group-editorial">
+              <label for="newTitle">Volume Title *</label>
+              <input type="text" id="newTitle" placeholder="e.g., The Odyssey" required>
+            </div>
+
+            <div class="form-group-editorial">
+              <label for="newAuthor">Author Attribution *</label>
+              <input type="text" id="newAuthor" placeholder="e.g., Homer" required>
+            </div>
+
+            <div class="form-row-editorial">
+              <div class="form-group-editorial">
+                <label for="newYear">Publication Year</label>
+                <input type="number" id="newYear" value="1920" min="500" max="2099">
+              </div>
+
+              <div class="form-group-editorial">
+                <label for="newGenre">Literary Genre</label>
+                <input type="text" id="newGenre" value="Epic Poetry">
+              </div>
+            </div>
+
+            <!-- Custom Book Cover Picture Selection -->
+            <div class="form-group-editorial">
+              <label for="newCover">Cover Picture URL</label>
+              <input type="url" id="newCover" placeholder="Paste custom image URL or select a preset below">
+              <div style="font-size:0.75rem; color:var(--text-dark-muted); margin-top:0.4rem; font-weight:600;">Or select a warm antique cover preset:</div>
+              <div class="cover-presets-row" id="coverPresets">
+                <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=400&q=80" alt="Preset 1" class="preset-thumb active-thumb" onclick="selectPresetCover(this.src)">
+                <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=400&q=80" alt="Preset 2" class="preset-thumb" onclick="selectPresetCover(this.src)">
+                <img src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=400&q=80" alt="Preset 3" class="preset-thumb" onclick="selectPresetCover(this.src)">
+                <img src="https://images.unsplash.com/photo-1463320726281-696a485928c7?auto=format&fit=crop&w=400&q=80" alt="Preset 4" class="preset-thumb" onclick="selectPresetCover(this.src)">
+                <img src="https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&w=400&q=80" alt="Preset 5" class="preset-thumb" onclick="selectPresetCover(this.src)">
+              </div>
+            </div>
+
+            <button type="submit" class="btn-high-fashion">
+              <span>✦</span> Archive Volume (POST /books)
+            </button>
+          </form>
+        </div>
+
+        <!-- Live Specimen Preview Card with Picture -->
+        <div class="preview-wrapper">
+          <div class="preview-title">Real-Time Specimen Preview</div>
+          <div class="editorial-card" id="previewCard">
+            <div class="card-cover-container">
+              <img id="previewCoverImg" src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=600&q=80" alt="Cover Preview" class="card-cover-img">
+              <div class="card-cover-overlay">
+                <span class="card-vol-badge">VOL • PREVIEW</span>
+                <span class="card-genre-badge" id="previewGenreTag">Epic Poetry</span>
+              </div>
+            </div>
+            <div class="card-body-content">
+              <h3 class="card-title" id="previewTitleText">The Odyssey</h3>
+              <p class="card-author" id="previewAuthorText">by Homer</p>
+              <div class="card-meta-line">
+                <span>Year: <strong id="previewYearText">1920</strong></span>
+                <span>REST Status: <strong>Pending POST</strong></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================
+         PAGE 3: LIVE API INSPECTOR
+         ==================================================== -->
+    <section id="page-inspector" class="page-view">
+      <div class="page-intro">
+        <span class="intro-tag">Network Monitor</span>
+        <h1 class="intro-title">Live API Inspector</h1>
+        <p class="intro-desc">Observe real-time HTTP requests, response headers, and JSON data structures.</p>
+        <div class="editorial-divider"></div>
+      </div>
+
+      <div class="inspector-layout">
+        <!-- Interactive Trigger Tests -->
+        <div class="inspector-endpoints">
+          <h3 class="endpoints-heading">Test API Endpoints</h3>
+          <div class="endpoint-btn-row" onclick="fetchBooks()">
+            <span class="method-tag get">GET</span>
+            <span>/books</span>
+          </div>
+          <div class="endpoint-btn-row" onclick="inspectSingleBook(1)">
+            <span class="method-tag get">GET</span>
+            <span>/books/1</span>
+          </div>
+          <div class="endpoint-btn-row" onclick="inspect404Test()">
+            <span class="method-tag get">GET</span>
+            <span>/books/999 (404)</span>
+          </div>
+          <div class="endpoint-btn-row" onclick="navigateTo('acquire')">
+            <span class="method-tag post">POST</span>
+            <span>/books</span>
+          </div>
+        </div>
+
+        <!-- Terminal Console -->
+        <div class="console-terminal">
+          <div class="terminal-header">
+            <span>● BOOKLIBR'E REST CONSOLE (PORT 3000)</span>
+            <button onclick="clearConsole()" style="background:none; border:none; color:var(--mustard-bright); cursor:pointer; font-size:0.75rem; font-weight:700; text-transform:uppercase;">Clear</button>
+          </div>
+          <div class="terminal-body" id="inspectorConsole">
+            <!-- Populated in real time -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================
+         PAGE 4: POSTMAN & DOCUMENTATION
+         ==================================================== -->
+    <section id="page-docs" class="page-view">
+      <div class="page-intro">
+        <span class="intro-tag">Integration Spec</span>
+        <h1 class="intro-title">Postman & Documentation</h1>
+        <p class="intro-desc">Everything needed to test, verify, and integrate with the Booklibr'e RESTful service.</p>
+        <div class="editorial-divider"></div>
+      </div>
+
+      <div class="docs-layout">
+        <!-- Download Postman Collection Box -->
+        <div class="docs-card" style="text-align: center; border-left: 4px solid var(--mustard-gold);">
+          <h2 class="docs-section-title">Ready-to-Use Postman Collection</h2>
+          <p class="docs-text">
+            Import the official collection directly into Postman to instantly execute all CRUD requests without manual setup.
+          </p>
+          <a href="book_api.postman_collection.json" download="book_api.postman_collection.json" class="btn-high-fashion" style="text-decoration:none; max-width:380px; margin:0 auto;">
+            📥 Download Collection (.json)
+          </a>
+        </div>
+
+        <!-- Endpoints Spec -->
+        <div class="docs-card">
+          <h2 class="docs-section-title">Endpoint Reference</h2>
+
+          <h4 style="font-family: var(--font-fashion); color: var(--burgundy-primary); font-size: 1.15rem; margin-top: 1.5rem; margin-bottom: 0.5rem;">
+            1. GET /books
+          </h4>
+          <p class="docs-text">Returns the full array of books currently held in server memory.</p>
+          <div class="code-snippet">curl -X GET http://localhost:3000/books</div>
+
+          <h4 style="font-family: var(--font-fashion); color: var(--burgundy-primary); font-size: 1.15rem; margin-top: 1.5rem; margin-bottom: 0.5rem;">
+            2. GET /books/:id
+          </h4>
+          <p class="docs-text">Retrieves a single book matching the given integer ID, or 404 if not found.</p>
+          <div class="code-snippet">curl -X GET http://localhost:3000/books/1</div>
+
+          <h4 style="font-family: var(--font-fashion); color: var(--burgundy-primary); font-size: 1.15rem; margin-top: 1.5rem; margin-bottom: 0.5rem;">
+            3. POST /books
+          </h4>
+          <p class="docs-text">Creates a new book. Requires JSON body with <code>title</code> and <code>author</code>, optional <code>year</code>, <code>genre</code>, and <code>cover</code>.</p>
+          <div class="code-snippet">curl -X POST http://localhost:3000/books \
+  -H "Content-Type: application/json" \
+  -d '{"title": "The Picture of Dorian Gray", "author": "Oscar Wilde", "year": 1890, "genre": "Gothic Philosophical", "cover": "https://images.unsplash.com/photo-1543002588-bfa74002ed7e"}'</div>
+
+          <h4 style="font-family: var(--font-fashion); color: var(--burgundy-primary); font-size: 1.15rem; margin-top: 1.5rem; margin-bottom: 0.5rem;">
+            4. PUT /books/:id
+          </h4>
+          <p class="docs-text">Modifies the specified fields of an existing book by ID.</p>
+          <div class="code-snippet">curl -X PUT http://localhost:3000/books/1 \
+  -H "Content-Type: application/json" \
+  -d '{"title": "The Great Gatsby (Centennial Edition)"}'</div>
+
+          <h4 style="font-family: var(--font-fashion); color: var(--burgundy-primary); font-size: 1.15rem; margin-top: 1.5rem; margin-bottom: 0.5rem;">
+            5. DELETE /books/:id
+          </h4>
+          <p class="docs-text">Deletes a book from memory by ID and returns the removed item.</p>
+          <div class="code-snippet">curl -X DELETE http://localhost:3000/books/2</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modal for Amending (PUT /books/:id) -->
+  <div class="modal-overlay" id="editModal">
+    <div class="fashion-modal">
+      <div class="modal-header-fashion">
+        <h2 class="modal-title-fashion" id="editModalTitle">Amend Volume</h2>
+        <button class="btn-close-fashion" onclick="closeEditModal()">&times;</button>
+      </div>
+      <form id="editBookForm">
+        <input type="hidden" id="editBookId">
+
+        <div class="form-group-editorial">
+          <label for="editTitle">Volume Title *</label>
+          <input type="text" id="editTitle" required>
+        </div>
+
+        <div class="form-group-editorial">
+          <label for="editAuthor">Author Attribution *</label>
+          <input type="text" id="editAuthor" required>
+        </div>
+
+        <div class="form-row-editorial">
+          <div class="form-group-editorial">
+            <label for="editYear">Year</label>
+            <input type="number" id="editYear" min="500" max="2099">
+          </div>
+          <div class="form-group-editorial">
+            <label for="editGenre">Genre</label>
+            <input type="text" id="editGenre">
+          </div>
+        </div>
+
+        <div class="form-group-editorial">
+          <label for="editCover">Cover Picture URL</label>
+          <input type="url" id="editCover" placeholder="https://images.unsplash.com/...">
+        </div>
+
+        <div style="display:flex; gap:1rem; margin-top:1.5rem;">
+          <button type="button" onclick="closeEditModal()" class="btn-card-action edit" style="flex:1; text-align:center;">Cancel</button>
+          <button type="submit" class="btn-high-fashion" style="flex:2;">Save Changes (PUT)</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
